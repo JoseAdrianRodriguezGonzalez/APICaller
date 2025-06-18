@@ -55,6 +55,9 @@ pub fn complete(ip:&str){
             1=>reading_element(&language,ip),
             2=>reading_union(&language, ip),
             3=>reading_mix_elements(&language, ip),
+            4=>reading_mix_unions(&language, ip),
+            5=>reading_advice(&language, ip),
+            6=>reading_advice_final(&language, ip),
             _=>{
                 println!("{}","Leaving");
                 break;
@@ -95,7 +98,7 @@ fn reading_union(lang:&str,_ip:&str){
     curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
 }
 fn reading_mix_elements(lang:&str,_ip:&str){
-    let url=format!("http://{}/llm-api/reading_union{}",_ip,if lang=="en"{""}else{"_es"});
+    let url=format!("http://{}/llm-api/reading_mix_elements{}",_ip,if lang=="en"{""}else{"_es"});
     println!("The lecture is in {}",lang);
     let reading_1=request_data("Give me the first lecture");
     let reading_2=request_data("Give me the second lecture");
@@ -103,6 +106,52 @@ fn reading_mix_elements(lang:&str,_ip:&str){
         r#"{{"reading_1":"{}",
              "reading_2":"{}"}}"#,
         reading_1,reading_2
+    );
+    curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
+}
+fn reading_mix_unions(lang:&str,_ip:&str){
+    let url=format!("http://{}/llm-api/reading_mix_union{}",_ip,if lang=="en"{""}else{"_es"});
+    println!("The lecture is in {}",lang);
+    let reading_mix_elements=request_data("Give me the lecture with elements mix");
+    let reading_union=request_data("Give me the union lecture");
+    let json=format!(
+        r#"{{"elements_mix_text":"{}",
+             "reading_union":"{}"}}"#,
+        reading_mix_elements,reading_union
+    );
+    curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
+}
+
+fn reading_advice(lang:&str,_ip:&str){
+    let url=format!("http://{}/llm-api/reading_advice{}",_ip,if lang=="en"{""}else{"_es"});
+    println!("The lecture is in {}",lang);
+    let card_1=request_data("Give me the first card");
+    let card_2=request_data("Give me the second card");
+    let json=format!(
+        r#"{{"card_1":"{}",
+             "card_2":"{}"}}"#,
+        card_1,card_2
+    );
+    curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
+}
+//
+fn reading_advice_final(lang:&str,_ip:&str){
+    let url=format!("http://{}/llm-api/reading_advice_final{}",_ip,if lang=="en"{""}else{"_es"});
+    println!("The lecture is in {}",lang);
+    let card_1=request_data("Give me the first lecture");
+    let card_2=request_data("Give me the second lecture");
+    let card_3=request_data("Give me the third lecture");
+    let card_4=request_data("Give me the fourth lecture");
+    let card_5=request_data("Give me the fifth lecture");
+    let advice=request_data("Give me an advice");
+    let json=format!(
+        r#"{{"cardReading_1":"{}",
+             "cardReading_2":"{}",
+             "cardReading_3":"{}",
+             "cardReading_4":"{}",
+             "cardReading_5":"{}",
+             "inputAdvice":"{}"}}"#,
+        card_1,card_2,card_3,card_4,card_5,advice
     );
     curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
 }
