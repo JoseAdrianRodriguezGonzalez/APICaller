@@ -2,6 +2,7 @@ mod terminal;
 mod menu;
 mod actions;
 mod tts_functions;
+mod tarot_functions;
 use colored::*;
 fn main(){
     terminal::clear_screen();
@@ -11,7 +12,7 @@ fn main(){
     loop{
         let selection=menu::main_menu(&optiones);
         match selection{
-            0=>println!("{}","Tarot api selected".green()),
+            0=>actions::run_tarot(),
             1=>actions::run_text_to_tts(),
             _=>{
                 println!("{}","Goodbye!".red());
