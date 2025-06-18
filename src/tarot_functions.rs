@@ -142,16 +142,14 @@ fn reading_advice_final(lang:&str,_ip:&str){
     let card_2=request_data("Give me the second lecture");
     let card_3=request_data("Give me the third lecture");
     let card_4=request_data("Give me the fourth lecture");
-    let card_5=request_data("Give me the fifth lecture");
     let advice=request_data("Give me an advice");
     let json=format!(
         r#"{{"cardReading_1":"{}",
              "cardReading_2":"{}",
              "cardReading_3":"{}",
              "cardReading_4":"{}",
-             "cardReading_5":"{}",
              "inputAdvice":"{}"}}"#,
-        card_1,card_2,card_3,card_4,card_5,advice
+        card_1,card_2,card_3,card_4,advice
     );
     curl(&url, &"POST".to_string(), ContentType::Json, &Some(json), &None);
 }
